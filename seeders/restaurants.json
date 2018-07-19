@@ -1,0 +1,9 @@
+[
+  {
+    "id": "1",
+    "email": "sanscafe@sanscafe.id",
+    "name": "Sans Cafe",
+    "password": "sans123",
+    "verificatoin_token": null
+  }
+]
