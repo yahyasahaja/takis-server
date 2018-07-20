@@ -1,25 +1,43 @@
-//MODULES
 import Sequelize from 'sequelize'
-import connection from '../connection'
+import connection from './connection'
 
-//USER_SCHEMA
-export default connection.define('Restaurant', {
-  name: {
-    type: Sequelize.STRING(64),
-    allowNull: false,
+export default connection.define(
+  'Restaurant',
+  {
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    description: {
+      type: Sequelize.STRING,
+    },
+    opening_time: {
+      type: Sequelize.DATE,
+    },
+    closing_time: {
+      type: Sequelize.DATE,
+    },
+    is_24_hours: {
+      type: Sequelize.BOOLEAN,
+    },
+    phone_number: {
+      type: Sequelize.NUMBER,
+    },
+    picture: {
+      type: Sequelize.STRING,
+    },
+    total_table: {
+      type: Sequelize.NUMBER,
+      allowNull: false
+    },
+    slug: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true
+    }
   },
-  email: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-  },
-  password: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-  },
-  verification_token: {
-    type: Sequelize.STRING,
+  {
+    underscored: true,
+    timestamps: false
   }
-}, {
-  underscored: true,
-  timestamps: false,
-}) 
+)

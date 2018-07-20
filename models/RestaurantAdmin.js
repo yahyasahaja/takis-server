@@ -2,24 +2,28 @@ import Sequelize from 'sequelize'
 import connection from './connection'
 
 export default connection.define(
-  'RestaurantMenu',
+  'RestaurantAdmin',
   {
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    description: {
-      type: Sequelize.STRING,
-      allowNull: true
-    },
-    price: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false
-    },
-    image: {
+    email: {
       type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: ''
+      unique: true,
+    },
+    password: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    nin: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    phone_number: {
+      type: Sequelize.STRING,
+      allowNull: false,
     }
   },
   {

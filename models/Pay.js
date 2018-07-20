@@ -2,11 +2,16 @@ import Sequelize from 'sequelize'
 import connection from './connection'
 
 export default connection.define(
-  'Category',
+  'Pay',
   {
     name: {
-      type: Sequelize.STRING(64),
-      allowNull: false
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    balance: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 0,
     }
   },
   {

@@ -1,26 +1,25 @@
 //MODULES
 import Express from 'express'
-import GraphqlHTTP from 'express-graphql'
+import graphqlExpress from 'express-graphql'
 import jwt from 'jsonwebtoken'
 // import path from 'path'
 import cors from 'cors'
 import compression from 'compression'
 
 //SCHEMA_RESTAURANT
-import restaurantSchema from './graphql/restaurantql/schema'
-
-//SCHEMA_CUSTOMER
-import customerSchema from './graphql/customerql/schema'
+import schema from './modules/schema'
 
 //EVENTS
 import { DB_CONNECTED, events } from './events'
 
 //DATABASE
-require('./db')
+import db from './models'
+
+//CONFIG
+import { JWT } from './config'
 
 //INNER_CONFIG
 const PORT = 5000
-const SECRET = 'iwiguhieuwghewgSansAppSansAja3528352'
 let app = Express()
 
 //CUSTOM_CORS
@@ -35,44 +34,62 @@ app.use((req, res, next) => {
 //COMPRESSION
 app.use(compression())
 
-//VERIFY_USER
-app.use(async req => {
-  const token = req.headers.authorization
+//AUTH
+async function authMiddleware(req, res, next) {
+  // pre define context scope
+  req.state = { scope: [] }
 
-  if (token) {
-    try {
-      const data = await jwt.verify(token, SECRET)
-      req.data = data
-      console.log(data)
-    } catch (err) {
-      console.log(err)
+  try {
+    const authHeader = req.headers.authorization || req.headers.Authorization
+
+    if (authHeader.length > 0) {
+      const [scheme, token] = authHeader.split(' ')
+
+      if (!/^Bearer$/i.test(scheme)) {
+        res.status(401).json({
+          error: 'Bad token format'
+        })
+      }
+
+      const dtoken = jwt.verify(token, JWT.SECRET_KEY)
+      
+      req.state = { ...req.state, ...dtoken }
+
+      if (dtoken.userType === 'Resto')
+        req.state.user = await db.models.RestaurantAdmin.findById(dtoken.userId)
+      else if (dtoken.userType === 'Customer')
+        req.state.user = await db.models.Customer.findById(dtoken.userId)
+      else
+        req.state.user = {
+          id: 0,
+          name: 'Guest',
+          email: ''
+        }
     }
-    
-    req.next()
-  } else req.next()
-})
 
-//GRAPHQL_RESTAURANT
-app.use('/restaurantql', cors(), GraphqlHTTP(req => ({
-  schema: restaurantSchema,
-  pretty: true,
-  graphiql: true,
-  context: {
-    SECRET,
-    ...req.data
+    await next()
+  } catch (err) {
+    res.status(401).json({
+      error: err.message
+    })
   }
-})))
+}
 
-//GRAPHQL_CUSTOMER
-app.use('/customerql', cors(), GraphqlHTTP(req => ({
-  schema: customerSchema,
-  pretty: true,
-  graphiql: true,
-  context: {
-    SECRET,
-    ...req.data
-  }
-})))
+//GRAPHQL
+app.use(
+  '/graphql',
+  authMiddleware(),
+  cors(),
+  graphqlExpress(req => ({
+    schema,
+    pretty: true,
+    graphiql: true,
+    context: {
+      JWT_SECRET_KEY: JWT.SECRET_KEY,
+      ...req.state
+    }
+  }))
+)
 
 //START_SERVER 
 //LISTEN TO PORT

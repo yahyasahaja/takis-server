@@ -2,25 +2,17 @@ import Sequelize from 'sequelize'
 import connection from './connection'
 
 export default connection.define(
-  'RestaurantMenu',
+  'SocialMedia',
   {
-    name: {
+    facebook: {
       type: Sequelize.STRING,
-      allowNull: false
     },
-    description: {
+    twitter: {
       type: Sequelize.STRING,
-      allowNull: true
     },
-    price: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false
-    },
-    image: {
+    instagram: {
       type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: ''
-    }
+    },
   },
   {
     underscored: true,

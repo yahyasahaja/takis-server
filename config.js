@@ -8,8 +8,12 @@ export const DATABASE = {
   PORT: 3306,
   POOL_SIZE: 10,
 }
+export const JWT = {
+  SECRET_KEY: 'iwiguhieuwghewgSansAppSansAja3528352'
+}
 
 export default {
   LOG_MODE,
   DATABASE,
+  JWT,
 }

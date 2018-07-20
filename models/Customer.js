@@ -1,22 +1,29 @@
-//MODULES
 import Sequelize from 'sequelize'
-import connection from '../connection'
+import connection from './connection'
 
-//USER_SCHEMA
-export default connection.define('Customer', {
-  name: {
-    type: Sequelize.STRING(64),
-    allowNull: false,
+export default connection.define(
+  'Customer',
+  {
+    email: {
+      type: Sequelize.STRING(128),
+      allowNull: false,
+      unique: true
+    },
+    name: {
+      type: Sequelize.STRING(64),
+      allowNull: false
+    },
+    password: {
+      type: Sequelize.STRING(128),
+      allowNull: false
+    },
+    profile_picture: {
+      type: Sequelize.STRING(128),
+      allowNull: true
+    }
   },
-  email: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-  },
-  password: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-  },
-}, {
-  underscored: true,
-  timestamps: false,
-}) 
+  {
+    underscored: true,
+    timestamps: false
+  }
+)

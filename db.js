@@ -41,6 +41,7 @@ Customer.belongsTo(Image, { foreignKey: 'image_id'})
 
 Category.belongsToMany(RestaurantMenu, { through: 'MenuCategory', foreignKey: 'category_id'})
 RestaurantMenu.belongsToMany(Category, { through: 'MenuCategory', foreignKey: 'menu_id' })
+
 //SEEDS
 import { giveSeeds } from './seeders' 
 

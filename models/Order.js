@@ -1,47 +1,39 @@
-//MODULES
 import Sequelize from 'sequelize'
-import connection from '../connection'
+import connection from './connection'
 
-//USER_SCHEMA
-export default connection.define('Order', {
-  total_price: {
-    type: Sequelize.INTEGER,
-  },
-  table_id: {
-    type: Sequelize.INTEGER,
-  },
-  valid_until: {
-    type: Sequelize.DATE,
-  },
-  valid: {
-    type: Sequelize.VIRTUAL,
-    get: function() {
-      return Date.now() > this.valid_until
+export default connection.define(
+  'Order',
+  {
+    total_price: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0
+    },
+    paid: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    table_number: {
+      type: Sequelize.NUMBER,
+      allowNull: false,
+    },
+    order_number: {
+      type: Sequelize.VIRTUAL,
+      get: async function() {
+        try {
+          const resto = await connection.models.Restaurant.findOne({
+            where: { id: this.restaurant_id }
+          })
+          return `${resto.name.substr(0, 2).toUpperCase()}${this.id}`
+        } catch (err) {
+          return err
+        }
+      }
     }
   },
-  paid: {
-    type: Sequelize.VIRTUAL,
-    get: async function() {
-      return !!(connection.models.Invoice.findOne({where: {id: this.invoice_id}}))
-    }
-  },
-  order_number: {
-    type: Sequelize.VIRTUAL,
-    get: async function() {
-      return `${
-        ( 
-          await connection
-            .models
-            .Restaurant
-            .findOne({where: {restaurant_id: this.restaurant_id}})
-        )
-          .split('')
-          .slice(0, 2)
-          .map(d => d[0])
-          .join('')
-      }${this.id}`
-    }
-  },
-}, {
-  underscored: true,
-})
+  {
+    underscored: true,
+    timestamps: false
+  }
+)
