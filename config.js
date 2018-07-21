@@ -33,6 +33,8 @@ export const CUSTOMER_SCOPE = [
   'customerLogin',
   'customerRegister',
   'verifyEmail',
+  'payOrder',
+  'updateCustomer',
 ]
 
 export const RESTAURANT_SCOPE = [

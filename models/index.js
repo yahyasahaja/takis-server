@@ -11,7 +11,7 @@ import RestaurantAdmin from './RestaurantAdmin'
 import Restaurant from './Restaurant'
 import SocialMedia from './SocialMedia'
 import Pay from './Pay'
-require('./MenuCategory')
+import './MenuCategory'
 
 // associate Restaurant with RestaurantMenu
 Restaurant.hasMany(RestaurantMenu, {

@@ -25,8 +25,10 @@ export default connection.define(
       type: Sequelize.STRING,
     },
     is_verified: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
+      type: Sequelize.VIRTUAL,
+      get: async function() {
+        return !!this.verification_token
+      }
     }
   },
   {

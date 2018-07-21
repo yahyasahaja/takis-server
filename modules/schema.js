@@ -73,9 +73,33 @@ const typeDefs = gql`
   }
 
   input OrderInput {
-    id: ID!,
-    table_number: Int!,
+    id: ID!
+    table_number: Int!
+  }
 
+  input UpdateCustomerInput {
+    email: String
+    name: String
+  }
+
+  input UpdateRestaurantInput {
+    name: String
+    description: String
+    opening_time: String
+    closing_time: String
+    is_24_hours: String
+    phone_number: String
+    total_tables: String
+    picture: String
+    slug: String
+  }
+
+  input UpdateRestaurantAdminInput {
+    email: String
+    restaurant: Restaurant
+    nin: String
+    address: String
+    phone_number: String
   }
 
   type Query {
@@ -109,6 +133,7 @@ const typeDefs = gql`
 
   'mutation'
   type Mutation {
+    #CUSTOMER
     'customer login and get user token'
     customerLogin(email: String!, password: String!): String!
 
@@ -119,23 +144,37 @@ const typeDefs = gql`
       name: String!
     ): String!
 
-    'restaurant admin login'
+    'update customer profile'
+    updateCustomer(input: UpdateCustomerInput!): String!
+
+    #RESTAURANT ADMIN
+    'restaurant admin login, and get user token'
     restaurantAdminLogin(email: String!, password: String!): String!
 
+    'update Restaurant Admin'
+    updateRestaurantAdmin(input: UpdateCustomerInput!): RestaurantAdmin
+
+    #RESTAURANT
+    updateRestaurant(input: UpdateRestaurantInput!): Restaurant
+
+    #TRANSACTION
     'create a new order'
-    createOrder(restaurant_id: ID!): Order!
+    createOrder(restaurant_id: ID!): Order
     
     'mark order as paid (for restaurant admin)'
-    markOrderAsPaid(token: ID!): Order!
+    markOrderAsPaid(token: ID!): Order
 
     'add order item to order (for restaurant admin)'
-    addOrderItemsToOrder(token: String!, order_items: [OrderItemInput!]!): Order!
+    addOrderItemsToOrder(token: String!, order_items: [OrderItemInput!]!): Order
 
     'remove order item to order (for restaurant admin)'
-    removeOrderItemsFromOrder(token: String!, order_item_ids: [ID!]!): Order!
+    removeOrderItemsFromOrder(token: String!, order_item_ids: [ID!]!): Order
 
     'update order item to order (for restaurant admin)'
-    replaceOrderItemsInOrder(token: String!, order_items: [OrderItemInput!]!): Order!
+    replaceOrderItemsInOrder(token: String!, order_items: [OrderItemInput!]!): Order
+
+    'pay order using T-Pay'
+    payOrder(order_id: ID!): Order
   }
 `
 
