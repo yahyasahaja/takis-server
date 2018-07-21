@@ -1,4 +1,5 @@
 import db from '../../models'
+import { USER_TYPE } from '../../config'
 
 export default async (obj, args, context) => {
   if (context.scope.includes('allOrders')) {
@@ -10,7 +11,7 @@ export default async (obj, args, context) => {
       const searchQuery = {}
       
       searchQuery [
-        context.userType === 'Resto'
+        context.userType === USER_TYPE.RESTAURANT
           ? 'restaurant_id'
           : 'customer_id'
       ] = context.user.id

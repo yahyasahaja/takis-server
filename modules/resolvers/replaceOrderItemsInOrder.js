@@ -1,9 +1,9 @@
 import db from '../../models'
-import { JWT } from '../../config'
+import { JWT, USER_TYPE } from '../../config'
 import jwt from 'jsonwebtoken'
 
-export default async (obj, { token, order_items }, { scope }) => {
-  if (token) scope = jwt.verify(token, JWT.SECRET_KEY).scope
+export default async (obj, { token, order_items }, { scope, userType }) => {
+  if (token && userType === USER_TYPE.GUEST) scope = jwt.verify(token, JWT.SECRET_KEY).scope
   
   if (!scope.includes('addOrderItemsToOrder')) {
     throw new Error('Permission Denied')
