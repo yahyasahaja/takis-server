@@ -3,9 +3,11 @@
 export default async (obj, { input }, { scope, user }) => {
   if (scope.includes('updateRestaurantAdmin')) {
     try {
-      for (let key in input) user[key] = input[key]
+      let restaurant = await user.getRestaurant()
 
-      return await user.save()
+      for (let key in input) restaurant[key] = input[key]
+
+      return await restaurant.save()
     } catch (error) {
       throw error
     }
