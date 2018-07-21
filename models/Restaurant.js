@@ -34,6 +34,10 @@ export default connection.define(
       type: Sequelize.STRING,
       allowNull: false,
       unique: true
+    },
+    is_verified: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
     }
   },
   {

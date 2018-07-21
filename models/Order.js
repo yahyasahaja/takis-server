@@ -30,6 +30,10 @@ export default connection.define(
           return err
         }
       }
+    },
+    token: {
+      type: Sequelize.STRING,
+      allowNull: false,
     }
   },
   {

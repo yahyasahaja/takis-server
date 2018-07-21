@@ -1,24 +1,27 @@
-import config from 'config')
-import jwt from 'jsonwebtoken')
-import bcrypt from 'bcrypt')
-import db from '../../models')
+import { JWT, USER_TYPE, CUSTOMER_SCOPE } from '../../config'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import db from '../../models'
 
 export default async (obj, { email, password }) => {
   try {
     const customer = await db.models.Customer.findOne({ where: { email } })
+
+    if (!customer) throw new Error('No user matches with that email')
+
     if (!await bcrypt.compare(password, customer.password)) {
-      throw new Error('Invalid Email or Password')
+      throw new Error('Invalid Password')
     }
-    const { secret_key: secretKey } = config.get('jwt')
+    
     return jwt.sign(
       {
-        scope: ['allRestaurants', 'restaurant', 'allOrders', 'order'],
+        scope: CUSTOMER_SCOPE,
         userId: customer.id,
-        userType: 'Customer'
+        userType: USER_TYPE.CUSTOMER
       },
-      secretKey
+      JWT.SECRET_KEY
     )
   } catch (err) {
-    return err
+    throw err
   }
 }

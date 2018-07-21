@@ -1,40 +1,29 @@
-import config from 'config')
-import jwt from 'jsonwebtoken')
-import bcrypt from 'bcrypt')
-import db from '../../models')
+import { JWT, USER_TYPE, RESTAURANT_SCOPE } from '../../config'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import db from '../../models'
 
 export default async (obj, { email, password }) => {
   try {
     const restoAdmin = await db.models.RestaurantAdmin.findOne({
       where: { email }
     })
+
     if (restoAdmin === null) {
-      throw new Error('Invalid Email or Password')
+      throw new Error('No user matches with that email')
     }
+
     if (!await bcrypt.compare(password, restoAdmin.password)) {
       throw new Error('Invalid Email or Password')
     }
-    const { secret_key: secretKey } = config.get('jwt')
+    
     return jwt.sign(
       {
-        scope: [
-          'allRestaurants',
-          'restaurant',
-          'allRestaurantMenus',
-          'restaurantMenu',
-          'allOrders',
-          'order',
-          'markOrderAsPaid',
-          'addOrderItemToOrder',
-          'removeOrderItemFromOrder',
-          'updateOrderItemInOrder',
-          'currentRestaurantAdmin',
-          'allCategories'
-        ],
+        scope: RESTAURANT_SCOPE,
         userId: restoAdmin.id,
-        userType: 'Resto'
+        userType: USER_TYPE.RESTAURANT
       },
-      secretKey
+      JWT.SECRET_KEY
     )
   } catch (err) {
     return err

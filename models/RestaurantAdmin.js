@@ -24,6 +24,13 @@ export default connection.define(
     phone_number: {
       type: Sequelize.STRING,
       allowNull: false,
+    },
+    verification_token: {
+      type: Sequelize.STRING,
+    },
+    is_verified: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
     }
   },
   {

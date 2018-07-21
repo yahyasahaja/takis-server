@@ -69,7 +69,13 @@ const typeDefs = gql`
   input OrderItemInput {
     menu_id: ID!
     quantity: Int!
-    note: String
+    note: String!
+  }
+
+  input OrderInput {
+    id: ID!,
+    table_number: Int!,
+
   }
 
   type Query {
@@ -103,43 +109,33 @@ const typeDefs = gql`
 
   'mutation'
   type Mutation {
-    'customer login'
+    'customer login and get user token'
     customerLogin(email: String!, password: String!): String!
 
-    'customer registration'
+    'customer registration and get user token'
     customerRegister(
       email: String!
       password: String!
       name: String!
-    ): Customer!
+    ): String!
 
     'restaurant admin login'
     restaurantAdminLogin(email: String!, password: String!): String!
 
-    'restaurant verification for customer'
-    verifyAndGetRestaurantToken(token: String!): OrderToken!
-
-    'verify table'
-    verifyTable(table_id: ID!): Boolean!
-
-    'set items on order'
-    updateOrder(items: [OrderItemInput!]!): Order!
-
+    'create a new order'
+    createOrder(restaurant_id: ID!): Order!
+    
     'mark order as paid (for restaurant admin)'
-    markOrderAsPaid(order_id: ID!): Boolean!
+    markOrderAsPaid(token: ID!): Order!
 
-    'add order item to order (for restaurant admin) (Returns ID of the orderItem)'
-    addOrderItemToOrder(order_id: ID!, order_item: OrderItemInput!): ID!
+    'add order item to order (for restaurant admin)'
+    addOrderItemsToOrder(token: String!, order_items: [OrderItemInput!]!): Order!
 
     'remove order item to order (for restaurant admin)'
-    removeOrderItemFromOrder(order_id: ID!, order_item_id: ID!): Boolean!
+    removeOrderItemsFromOrder(token: String!, order_item_ids: [ID!]!): Order!
 
     'update order item to order (for restaurant admin)'
-    updateOrderItemInOrder(
-      order_id: ID!
-      order_item_id: ID!
-      order_item: OrderItemInput!
-    ): Boolean!
+    replaceOrderItemsInOrder(token: String!, order_items: [OrderItemInput!]!): Order!
   }
 `
 

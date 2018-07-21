@@ -20,6 +20,13 @@ export default connection.define(
     profile_picture: {
       type: Sequelize.STRING(128),
       allowNull: true
+    },
+    verification_token: {
+      type: Sequelize.STRING,
+    },
+    is_verified: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
     }
   },
   {

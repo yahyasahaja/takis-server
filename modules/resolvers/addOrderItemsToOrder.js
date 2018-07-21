@@ -2,29 +2,23 @@ import db from '../../models'
 import { JWT } from '../../config'
 import jwt from 'jsonwebtoken'
 
-// for restaurant admin only
-export default async (obj, { token }, { scope }) => {
+export default async (obj, { token, order_items }, { scope }) => {
   if (token) scope = jwt.verify(token, JWT.SECRET_KEY).scope
-
-  if (!scope.includes('markOrderAsPaid')) {
+  
+  if (!scope.includes('addOrderItemsToOrder')) {
     throw new Error('Permission Denied')
   }
 
   try {
-    const order = await db.models.Order.findOne({
-      where: {
-        token
-      }
-    })
-
+    const order = await db.models.Order.findById({where: { token }})
+    
     if (order === null) {
       throw new Error('Invalid Order ID')
     }
 
-    order.paid = true
-    await order.save()
-
-    return order
+    return await db.models.OrderItem.bulkCreate(
+      order_items.map(d => ({ order_id: order.id, ...d}))
+    )
   } catch (error) {
     throw error
   }

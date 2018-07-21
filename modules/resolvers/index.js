@@ -1,26 +1,35 @@
-import allRestaurants from './allRestaurants')
-import restaurant from './restaurant')
-import allRestaurantMenus from './allRestaurantMenus')
-import restaurantMenu from './restaurantMenu')
-import allOrders from './allOrders')
-import order from './order')
-import currentRestaurant from './currentRestaurant')
-import currentRestaurantAdmin from './currentRestaurantAdmin')
-import currentOrder from './currentOrder')
-import allCategories from './allCategories')
+import allRestaurants from './allRestaurants'
+import restaurant from './restaurant'
+import allRestaurantMenus from './allRestaurantMenus'
+import restaurantMenu from './restaurantMenu'
+import allOrders from './allOrders'
+import order from './order'
+import allCategories from './allCategories'
 
-import customerLogin from './customerLogin')
-import customerRegister from './customerRegister')
-import restaurantAdminLogin from './restaurantAdminLogin')
-import verifyAndGetRestaurantToken from './verifyAndGetRestaurantToken')
-import verifyTable from './verifyTable')
-import updateOrder from './updateOrder')
-import addOrderItemToOrder from './addOrderItemToOrder')
-import removeOrderItemFromOrder from './removeOrderItemFromOrder')
-import updateOrderItemInOrder from './updateOrderItemInOrder')
-import markOrderAsPaid from './markOrderAsPaid')
+import customerLogin from './customerLogin'
+import customerRegister from './customerRegister'
+import restaurantAdminLogin from './restaurantAdminLogin'
+import addOrderItemsToOrder from './addOrderItemsToOrder'
+import removeOrderItemsFromOrder from './removeOrderItemsFromOrder'
+import replaceOrderItemsInOrder from './replaceOrderItemsInOrder'
+import markOrderAsPaid from './markOrderAsPaid'
 
 export default {
+  RestaurantAdmin: {
+    restaurant: async restaurantAdmin => {
+      return await restaurantAdmin.getRestaurant()
+    }
+  },
+  Restaurant: {
+    menus: async restaurant => {
+      return await restaurant.getRestaurantMenus()
+    }
+  },
+  RestaurantMenu: {
+    categories: async restaurantMenu => {
+      return await restaurantMenu.getCategories()
+    }
+  },
   Order: {
     restaurant: async order => {
       return await order.getRestaurant()
@@ -34,6 +43,14 @@ export default {
         name: 'Guest',
         email: ''
       }
+    },
+    order_items: async order => {
+      return await order.getOrderItems()
+    }
+  },
+  OrderItems: {
+    restaurant_menu: async orderItem => {
+      return await orderItem.getRestaurantMenu()
     }
   },
   Query: {
@@ -43,21 +60,15 @@ export default {
     restaurantMenu,
     allOrders,
     order,
-    currentRestaurant,
-    currentOrder,
-    currentRestaurantAdmin,
     allCategories
   },
   Mutation: {
     customerLogin,
     customerRegister,
     restaurantAdminLogin,
-    verifyAndGetRestaurantToken,
-    verifyTable,
-    updateOrder,
-    addOrderItemToOrder,
-    removeOrderItemFromOrder,
-    updateOrderItemInOrder,
+    addOrderItemsToOrder,
+    removeOrderItemsFromOrder,
+    replaceOrderItemsInOrder,
     markOrderAsPaid
   }
 }

@@ -16,7 +16,7 @@ import { DB_CONNECTED, events } from './events'
 import db from './models'
 
 //CONFIG
-import { JWT } from './config'
+import { JWT, USER_TYPE } from './config'
 
 //INNER_CONFIG
 const PORT = 5000
@@ -55,16 +55,19 @@ async function authMiddleware(req, res, next) {
       
       req.state = { ...req.state, ...dtoken }
 
-      if (dtoken.userType === 'Resto')
+      if (dtoken.userType === USER_TYPE.RESTAURANT)
         req.state.user = await db.models.RestaurantAdmin.findById(dtoken.userId)
-      else if (dtoken.userType === 'Customer')
+      else if (dtoken.userType === USER_TYPE.CUSTOMER)
         req.state.user = await db.models.Customer.findById(dtoken.userId)
-      else
+      else {
         req.state.user = {
           id: 0,
-          name: 'Guest',
+          name: USER_TYPE.GUEST,
           email: ''
         }
+
+        req.userType = USER_TYPE.GUEST
+      }
     }
 
     await next()
