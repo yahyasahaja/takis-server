@@ -147,6 +147,9 @@ const typeDefs = gql`
     'update customer profile'
     updateCustomer(input: UpdateCustomerInput!): String!
 
+    'verify email verification token'
+    verifyCustomerToken(token: String): Customer
+
     #RESTAURANT ADMIN
     'restaurant admin login, and get user token'
     restaurantAdminLogin(email: String!, password: String!): String!
@@ -154,8 +157,14 @@ const typeDefs = gql`
     'update Restaurant Admin'
     updateRestaurantAdmin(input: UpdateCustomerInput!): RestaurantAdmin
 
+    'verify email verification token'
+    verifyRestaurantAdminToken(token: String): RestaurantAdmin
+
     #RESTAURANT
     updateRestaurant(input: UpdateRestaurantInput!): Restaurant
+
+    'verify email verification token'
+    verifyRestaurant(): Restaurant
 
     #TRANSACTION
     'create a new order'
