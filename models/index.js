@@ -12,13 +12,10 @@ import Restaurant from './Restaurant'
 import SocialMedia from './SocialMedia'
 import Pay from './Pay'
 import './MenuCategory'
-import './Uploads'
+import './Upload'
 
 // associate Restaurant with RestaurantMenu
-Restaurant.hasMany(RestaurantMenu, {
-  foreignKey: 'restaurant_id',
-  as: 'menus'
-})
+Restaurant.hasMany(RestaurantMenu, { foreignKey: 'restaurant_id' })
 RestaurantMenu.belongsTo(Restaurant, { foreignKey: 'restaurant_id' })
 
 // associate RestaurantAdmin with Restaurant
@@ -80,5 +77,5 @@ connection
   .catch(err => {
     console.log(err)
   })
-
+  
 export default connection

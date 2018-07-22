@@ -28,6 +28,7 @@ export default {
   },
   Restaurant: {
     menus: async restaurant => {
+      // for (let i in restaurant) if (i.indexOf('get') != -1) console.log(i)
       return await restaurant.getRestaurantMenus()
     }
   },
@@ -54,7 +55,7 @@ export default {
       return await order.getOrderItems()
     }
   },
-  OrderItems: {
+  OrderItem: {
     restaurant_menu: async orderItem => {
       return await orderItem.getRestaurantMenu()
     }

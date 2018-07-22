@@ -21,7 +21,8 @@ const connection = new Sequelize(DATABASE_NAME, USER, PASSWORD, {
     max,
     acquire: 30000,
     idle: 1000
-  }
+  },
+  operatorsAliases: false
 })
 
 export default connection

@@ -15,7 +15,7 @@ export default connection.define(
       defaultValue: false
     },
     table_number: {
-      type: Sequelize.NUMBER,
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     order_number: {
@@ -29,7 +29,7 @@ export default connection.define(
         } catch (err) {
           return err
         }
-      }
+      },
     },
     token: {
       type: Sequelize.STRING,

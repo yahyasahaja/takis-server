@@ -45,9 +45,9 @@ async function authMiddleware(req, res, next) {
   req.state = { scope: [] }
 
   try {
-    const authHeader = req.headers.authorization || req.headers.Authorization
+    const authHeader = req.headers.authorization || req.headers.Authorization 
 
-    if (authHeader.length > 0) {
+    if (authHeader && authHeader.length > 0) {
       const [scheme, token] = authHeader.split(' ')
 
       if (!/^Bearer$/i.test(scheme)) {
@@ -86,8 +86,8 @@ async function authMiddleware(req, res, next) {
 //GRAPHQL
 app.use(
   '/graphql',
+  authMiddleware,
   bodyParser.json(),
-  authMiddleware(),
   cors(),
   apolloUploadExpress(),
   graphqlExpress(req => ({

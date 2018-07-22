@@ -4,6 +4,8 @@
     "email": "sanscafe@sanscafe.id",
     "name": "Sans Cafe",
     "password": "sans123",
-    "verificatoin_token": null
+    "verificatoin_token": null,
+    "total_table": 30,
+    "slug": "satemadura"
   }
 ]

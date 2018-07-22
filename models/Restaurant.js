@@ -21,13 +21,13 @@ export default connection.define(
       type: Sequelize.BOOLEAN,
     },
     phone_number: {
-      type: Sequelize.NUMBER,
+      type: Sequelize.INTEGER,
     },
     picture: {
       type: Sequelize.STRING,
     },
     total_table: {
-      type: Sequelize.NUMBER,
+      type: Sequelize.INTEGER,
       allowNull: false
     },
     slug: {

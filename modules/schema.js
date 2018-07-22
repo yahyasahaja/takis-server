@@ -96,14 +96,6 @@ const typeDefs = gql`
     slug: String
   }
 
-  input UpdateRestaurantAdminInput {
-    email: String
-    restaurant: Restaurant
-    nin: String
-    address: String
-    phone_number: String
-  }
-
   type File {
     id: ID!
     path: String!
@@ -113,89 +105,89 @@ const typeDefs = gql`
   }
 
   type Query {
-    'get all restaurants'
+    "get all restaurants"
     allRestaurants: [Restaurant!]!
 
-    'get restaurant by id or using restaurant admin token'
+    "get restaurant by id or using restaurant admin token"
     restaurant(id: ID): Restaurant
 
-    'get restaurant admin by id or using restaurant admin token'
+    "get restaurant admin by id or using restaurant admin token"
     restaurantAdmin(id: ID): RestaurantAdmin
 
-    'get all restaurant menu from a restaurant'
+    "get all restaurant menu from a restaurant"
     allRestaurantMenus(restaurant_id: ID): [RestaurantMenu!]!
 
-    'get single restaurant menu from a restaurant'
+    "get single restaurant menu from a restaurant"
     restaurantMenu(id: ID!): RestaurantMenu
 
-    'get all orders'
+    "get all orders"
     allOrders: [Order!]!
 
-    'get detailed order'
+    "get detailed order"
     order(id: ID!): Order
 
-    'get customer by id or using customer token'
+    "get customer by id or using customer token"
     customer(id: ID): Customer!
 
-    'get all categories by restaurant id'
-    allCategories(restaurant_id: ID): [Categories!]!
+    "get all categories by restaurant id"
+    allCategories(restaurant_id: ID): [Category!]!
 
     #UPLOADS
     uploads: [File]
   }
 
-  'mutation'
+  "mutation"
   type Mutation {
     #CUSTOMER
-    'customer login and get user token'
+    "customer login and get user token"
     customerLogin(email: String!, password: String!): String!
 
-    'customer registration and get user token'
+    "customer registration and get user token"
     customerRegister(
       email: String!
       password: String!
       name: String!
     ): String!
 
-    'update customer profile'
+    "update customer profile"
     updateCustomer(input: UpdateCustomerInput!): String!
 
-    'verify email verification token'
+    "verify email verification token"
     verifyCustomerToken(token: String): Customer
 
     #RESTAURANT ADMIN
-    'restaurant admin login, and get user token'
+    "restaurant admin login, and get user token"
     restaurantAdminLogin(email: String!, password: String!): String!
 
-    'update Restaurant Admin'
+    "update Restaurant Admin"
     updateRestaurantAdmin(input: UpdateCustomerInput!): RestaurantAdmin
 
-    'verify email verification token'
+    "verify email verification token"
     verifyRestaurantAdminToken(token: String): RestaurantAdmin
 
     #RESTAURANT
     updateRestaurant(input: UpdateRestaurantInput!): Restaurant
 
-    #'verify email verification token'
+    #"verify email verification token"
     #verifyRestaurant(token: String!): Restaurant
 
     #TRANSACTION
-    'create a new order'
+    "create a new order"
     createOrder(restaurant_id: ID!): Order
     
-    'mark order as paid (for restaurant admin)'
+    "mark order as paid (for restaurant admin)"
     markOrderAsPaid(token: ID!): Order
 
-    'add order item to order (for restaurant admin)'
+    "add order item to order (for restaurant admin)"
     addOrderItemsToOrder(token: String!, order_items: [OrderItemInput!]!): Order
 
-    'remove order item to order (for restaurant admin)'
+    "remove order item to order (for restaurant admin)"
     removeOrderItemsFromOrder(token: String!, order_item_ids: [ID!]!): Order
 
-    'update order item to order (for restaurant admin)'
+    "update order item to order (for restaurant admin)"
     replaceOrderItemsInOrder(token: String!, order_items: [OrderItemInput!]!): Order
 
-    'pay order using T-Pay'
+    "pay order using T-Pay"
     payOrder(order_id: ID!): Order
 
     #UPLOADS
