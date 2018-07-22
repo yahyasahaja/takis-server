@@ -104,6 +104,14 @@ const typeDefs = gql`
     phone_number: String
   }
 
+  type File {
+    id: ID!
+    path: String!
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
+
   type Query {
     'get all restaurants'
     allRestaurants: [Restaurant!]!
@@ -131,6 +139,9 @@ const typeDefs = gql`
 
     'get all categories by restaurant id'
     allCategories(restaurant_id: ID): [Categories!]!
+
+    #UPLOADS
+    uploads: [File]
   }
 
   'mutation'
@@ -165,8 +176,8 @@ const typeDefs = gql`
     #RESTAURANT
     updateRestaurant(input: UpdateRestaurantInput!): Restaurant
 
-    'verify email verification token'
-    verifyRestaurant(): Restaurant
+    #'verify email verification token'
+    #verifyRestaurant(token: String!): Restaurant
 
     #TRANSACTION
     'create a new order'
@@ -186,6 +197,10 @@ const typeDefs = gql`
 
     'pay order using T-Pay'
     payOrder(order_id: ID!): Order
+
+    #UPLOADS
+    singleUpload(file: Upload!): File!
+    multipleUpload(files: [Upload!]!): [File!]!
   }
 `
 

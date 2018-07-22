@@ -1,7 +1,16 @@
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
 import { JWT, USER_TYPE } from './config'
+import mkdirp from 'mkdirp'
+import shortid from 'shortid'
+import db from './models'
+import fs from 'fs'
 
+//CONFIG
+const uploadDir = './uploads'
+mkdirp.sync(uploadDir)
+
+//UTILS
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -58,4 +67,33 @@ export const sendEmailVerification = async (user, userType) => {
       }
     })
   })
+}
+
+export const storeFS = ({ stream, filename }) => {
+  const id = shortid.generate()
+  const path = `${uploadDir}/${id}-${filename}`
+  return new Promise((resolve, reject) =>
+    stream
+      .on('error', error => {
+        if (stream.truncated)
+          // Delete the truncated file
+          fs.unlinkSync(path)
+        reject(error)
+      })
+      .pipe(fs.createWriteStream(path))
+      .on('error', error => reject(error))
+      .on('finish', () => resolve({ id, path }))
+  )
+}
+
+export const processUpload = async upload => {
+  const { stream, filename, mimetype, encoding } = await upload
+  const { id, path } = await storeFS({ stream, filename })
+  return await db.models.Uploads.create({ id, filename, mimetype, encoding, path })
+}
+
+export default {
+  sendEmailVerification,
+  storeFS,
+  processUpload,
 }

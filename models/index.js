@@ -12,6 +12,7 @@ import Restaurant from './Restaurant'
 import SocialMedia from './SocialMedia'
 import Pay from './Pay'
 import './MenuCategory'
+import './Uploads'
 
 // associate Restaurant with RestaurantMenu
 Restaurant.hasMany(RestaurantMenu, {

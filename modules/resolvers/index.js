@@ -1,5 +1,8 @@
 import { GraphQLUpload } from 'apollo-upload-server'
 
+//MODELS
+import db from '../../models'
+
 import allRestaurants from './allRestaurants'
 import restaurant from './restaurant'
 import allRestaurantMenus from './allRestaurantMenus'
@@ -63,7 +66,8 @@ export default {
     restaurantMenu,
     allOrders,
     order,
-    allCategories
+    allCategories,
+    uploads: () => db.models.Upload.findAll(),
   },
   Mutation: {
     customerLogin,
