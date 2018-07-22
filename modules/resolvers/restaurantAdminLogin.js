@@ -2,6 +2,7 @@ import { JWT, USER_TYPE, RESTAURANT_SCOPE } from '../../config'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import db from '../../models'
+import { sendEmailVerification } from '../../utils'
 
 export default async (obj, { email, password }) => {
   try {
@@ -16,6 +17,8 @@ export default async (obj, { email, password }) => {
     if (!await bcrypt.compare(password, restoAdmin.password)) {
       throw new Error('Invalid Email or Password')
     }
+
+    await sendEmailVerification(restoAdmin, USER_TYPE.RESTAURANT)
     
     return jwt.sign(
       {

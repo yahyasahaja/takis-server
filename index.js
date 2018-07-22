@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken'
 // import path from 'path'
 import cors from 'cors'
 import compression from 'compression'
+import { apolloUploadExpress } from 'apollo-upload-server'
+import bodyParser from 'body-parser'
 
 //SCHEMA_RESTAURANT
 import schema from './modules/schema'
@@ -21,6 +23,9 @@ import { JWT, USER_TYPE } from './config'
 //INNER_CONFIG
 const PORT = 5000
 let app = Express()
+
+//PARSER
+bodyParser.urlencoded({extended: true})
 
 //CUSTOM_CORS
 app.use((req, res, next) => {
@@ -81,8 +86,10 @@ async function authMiddleware(req, res, next) {
 //GRAPHQL
 app.use(
   '/graphql',
+  bodyParser.json(),
   authMiddleware(),
   cors(),
+  apolloUploadExpress(),
   graphqlExpress(req => ({
     schema,
     pretty: true,

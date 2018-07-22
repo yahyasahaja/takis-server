@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt'
 import db from '../../models'
 import jwt from 'jsonwebtoken'
-import { JWT, USER_TYPE } from '../../config'
+import { JWT, USER_TYPE, CUSTOMER_SCOPE } from '../../config'
+import { sendEmailVerification } from '../../utils'
 
 export default async (obj, { email, password, name }) => {
   try {
@@ -21,17 +22,14 @@ export default async (obj, { email, password, name }) => {
 
     let token = jwt.sign(
       {
-        scope: [
-          'allRestaurants', 
-          'restaurant', 
-          'allOrders', 
-          'order'
-        ],
+        scope: CUSTOMER_SCOPE,
         userId: user.id,
         userType: USER_TYPE.CUSTOMER
       },
       JWT.SECRET_KEY
     )
+
+    await sendEmailVerification(user, USER_TYPE.CUSTOMER)
 
     return token
   } catch (err) {

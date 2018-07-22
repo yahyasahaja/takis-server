@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 import resolvers from './resolvers'
 
 const typeDefs = gql`
+  scalar Upload
+
   type RestaurantMenu {
     id: ID!
     name: String!

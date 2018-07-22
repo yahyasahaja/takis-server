@@ -1,3 +1,5 @@
+import { GraphQLUpload } from 'apollo-upload-server'
+
 import allRestaurants from './allRestaurants'
 import restaurant from './restaurant'
 import allRestaurantMenus from './allRestaurantMenus'
@@ -15,6 +17,7 @@ import replaceOrderItemsInOrder from './replaceOrderItemsInOrder'
 import markOrderAsPaid from './markOrderAsPaid'
 
 export default {
+  Upload: GraphQLUpload,
   RestaurantAdmin: {
     restaurant: async restaurantAdmin => {
       return await restaurantAdmin.getRestaurant()
